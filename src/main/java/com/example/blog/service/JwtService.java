@@ -55,14 +55,4 @@ public class JwtService {
     }
 
 
-
-  /*  private final String SECRET_KEY="keykeykeykeykeykeykeykey282828282828";
-
-    public String generateToken(String username){
-        return Jwts.builder().setSubject(username).setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+600000))
-                .signWith(BCFKSLoadStoreParameter.SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
-    }
-*/
 }

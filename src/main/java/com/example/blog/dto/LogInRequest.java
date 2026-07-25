@@ -1,7 +1,10 @@
 package com.example.blog.dto;
+import jakarta.validation.constraints.NotBlank;
 
 public class LogInRequest {
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
 
     public LogInRequest(){}

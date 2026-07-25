@@ -6,7 +6,9 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="Users")
+@Table(name="Users",
+        uniqueConstraints = @UniqueConstraint(columnNames = "USERNAME")
+)
 public class User {
 
     @Id
@@ -21,7 +23,7 @@ public class User {
     @Column(name="PASSWORD")
     private String password;
 
-    @Column(name="USERNAME")
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(name="NAME")
