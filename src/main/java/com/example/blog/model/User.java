@@ -1,8 +1,12 @@
 package com.example.blog.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -40,4 +44,11 @@ public class User {
         this.username = username;
         this.name = name;
     }
+
+    @OneToMany(mappedBy="blogAuthor")
+    @JsonIgnore
+    private List<BlogPost> blogs = new ArrayList<>();
+
+
+
 }

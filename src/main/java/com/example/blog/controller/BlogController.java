@@ -1,0 +1,64 @@
+package com.example.blog.controller;
+
+import com.example.blog.dto.BlogRequest;
+import com.example.blog.dto.BlogResponse;
+import com.example.blog.model.BlogPost;
+import com.example.blog.service.BlogService;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+@RequestMapping("/api/blog")
+
+public class BlogController {
+
+    private final BlogService blogService;
+
+    public BlogController(BlogService blogService) {
+        this.blogService = blogService;
+    }
+
+    @PostMapping
+    public ResponseEntity<BlogPost> createBlog(@RequestBody BlogRequest blogRequest, Authentication authentication){
+
+        String username = authentication.getName();
+
+
+        BlogPost blogPost = blogService.createBlog(blogRequest, username);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(blogPost);
+
+
+}
+    @GetMapping("page")
+    public ResponseEntity<Page<BlogResponse>> getAllBlogs( @RequestParam (defaultValue = "0") int page,
+                                                           @RequestParam (defaultValue = "10") int size){
+        Page <BlogResponse> blogs = blogService.getAllBlogsWithPagiationint(page, size);
+        return ResponseEntity.ok(blogs);
+
+            }
+
+    @PutMapping("/{blogID}")
+            public ResponseEntity<BlogResponse> updateBlog(@PathVariable Long blogID, @RequestBody BlogRequest blogRequest, Authentication authentication){
+        String username = authentication.getName();
+
+        BlogPost updatedBlog = blogService.updateBlog(blogID, blogRequest, username);
+
+        BlogResponse blogResponse= new BlogResponse();
+
+        blogResponse.setBlogId(updatedBlog.getBlogID());
+        blogResponse.setTitle(updatedBlog.getTitle());
+        blogResponse.setContent(updatedBlog.getContent());
+        blogResponse.setCategory(updatedBlog.getCategory());
+        blogResponse.setStatus(updatedBlog.getStatus());
+
+        return ResponseEntity.ok(blogResponse);
+
+    }
+
+
+}
