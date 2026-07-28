@@ -8,15 +8,17 @@ public class BlogResponse {
     public String content;
     public String category;
     public BlogStatus status;
+    public String slug;
 
     public BlogResponse(){}
 
-    public BlogResponse(Long blogId, String title, String content, String category, BlogStatus status) {
+    public BlogResponse(Long blogId, String title, String content, String category, String slug, BlogStatus status) {
         this.blogId = blogId;
         this.title = title;
         this.content = content;
         this.category = category;
         this.status = status;
+this.slug=slug;
     }
 
     public Long getBlogId() {
@@ -58,4 +60,14 @@ public class BlogResponse {
     public void setStatus(BlogStatus status) {
         this.status = status;
     }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+
 }

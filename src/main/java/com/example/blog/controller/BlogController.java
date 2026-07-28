@@ -34,7 +34,7 @@ public class BlogController {
 
 
 }
-    @GetMapping("page")
+    @GetMapping("/page")
     public ResponseEntity<Page<BlogResponse>> getAllBlogs( @RequestParam (defaultValue = "0") int page,
                                                            @RequestParam (defaultValue = "10") int size){
         Page <BlogResponse> blogs = blogService.getAllBlogsWithPagiationint(page, size);
@@ -59,6 +59,39 @@ public class BlogController {
         return ResponseEntity.ok(blogResponse);
 
     }
+
+
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity <BlogResponse> getBlogBySlug(@PathVariable String slug){
+
+     return ResponseEntity.ok(blogService.getBlogBySlug(slug));
+    }
+
+    @DeleteMapping("/delete/blogid/{blogID}")
+    public ResponseEntity <BlogPost> deleteBlogByID(@PathVariable Long blogID, Authentication authentication){
+String username= authentication.getName();
+    BlogPost deletedBlog = blogService.deleteBlogByID(blogID,username);
+
+
+    return ResponseEntity.ok(deletedBlog);
+    }
+
+
+    @GetMapping("/id/{blogID}")
+    public ResponseEntity <BlogResponse> getBlogByID(@PathVariable Long blogID){
+        return ResponseEntity.ok(blogService.getBlogByID(blogID));
+    }
+
+    @DeleteMapping("/delete/slug/{slug}")
+    public ResponseEntity <BlogPost> deleteBlogBySlug(@PathVariable String slug, Authentication authentication){
+
+        String username = authentication.getName();
+        BlogPost deletedBlog = blogService.deleteBlogBySlug(slug,username);
+
+        return ResponseEntity.ok(deletedBlog);
+
+    }
+
 
 
 }

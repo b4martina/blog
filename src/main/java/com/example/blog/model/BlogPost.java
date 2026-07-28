@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="Blogs")
+@Table(name="blogs")
 public class BlogPost {
 
 @Id
@@ -31,6 +31,10 @@ private String category;
 @Column(name="STATUS")
 private BlogStatus status;
 
+@Column(name="SLUG", unique = true, nullable = false)
+private String slug;
+
+
 
     @ManyToOne
     @JoinColumn(name= "author_id")
@@ -40,13 +44,14 @@ private BlogStatus status;
     public BlogPost() {
     }
 
-    public BlogPost(Long blogID, String title, String content, String category, BlogStatus status, User author) {
+    public BlogPost(Long blogID, String title, String content, String category, BlogStatus status, String slug, User author) {
         this.blogID = blogID;
         this.title = title;
         this.content = content;
         this.category = category;
         this.status = status;
         this.blogAuthor=author;
+        this.slug=slug;
     }
 
 
