@@ -3,6 +3,7 @@ package com.example.blog.service;
 import com.example.blog.dto.BlogRequest;
 import com.example.blog.dto.BlogResponse;
 import com.example.blog.model.BlogPost;
+import com.example.blog.model.BlogStatus;
 import com.example.blog.model.User;
 import com.example.blog.repository.BlogPostRepository;
 import com.example.blog.repository.UserRepository;
@@ -11,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public  class BlogService {
@@ -186,6 +190,132 @@ return blogPostRepository.save(blogPost);
         return blogPost;
 
     }
+
+
+    //filtering blogs by category or publication status
+    //category: features: anyone can retrieve this data, no need for authenticcation.
+/*
+    public List<BlogResponse> getStatusFilteredBooks (BlogStatus status){
+        List <BlogPost> blogs;
+
+        if (status== null) {
+            blogs = blogPostRepository.findAll();
+        }else{
+            blogs = blogPostRepository.findFilteredBlogs(status.name());
+        }
+       List<BlogResponse> blogResponse= new ArrayList<>();
+
+        for (BlogPost blog : blogs ){
+            BlogResponse br = new BlogResponse();
+            br.setTitle(blog.getTitle());
+            br.setContent(blog.getContent());
+            br.setCategory(blog.getCategory());
+            br.setStatus(blog.getStatus());
+            br.setSlug(blog.getSlug());
+
+            blogResponse.add(br);
+
+        }
+
+       return blogResponse;
+
+    }
+
+
+
+
+
+    //publication status: only an owner can view status : published or draft.
+    public List<BlogResponse> getCategoryFilteredBooks (BlogStatus status){
+        List <BlogPost> blogs;
+
+        if (status== null) {
+            blogs = blogPostRepository.findAll();
+        }else{
+            blogs = blogPostRepository.findFilteredBlogs(status.name());
+        }
+        List<BlogResponse> blogResponse= new ArrayList<>();
+
+        for (BlogPost blog : blogs ){
+            BlogResponse br = new BlogResponse();
+            br.setTitle(blog.getTitle());
+            br.setContent(blog.getContent());
+            br.setCategory(blog.getCategory());
+            br.setStatus(blog.getStatus());
+            br.setSlug(blog.getSlug());
+
+            blogResponse.add(br);
+
+        }
+
+        return blogResponse;
+
+    }*/
+
+
+    public List<BlogResponse> getCategoryFilteredBooks(String category){
+        List <BlogPost> blogs;              // = blogPostRepository.findCategoryFilteredBlogs(category);
+
+        if (category== null) {
+            blogs = blogPostRepository.findAll();
+        }else{
+            blogs = blogPostRepository.findCategoryFilteredBlogs(category);
+        }
+
+     List <BlogResponse> blogResponsesList= new ArrayList<>();
+        for (BlogPost blog : blogs) {
+
+            BlogResponse blogResponse = new BlogResponse();
+
+            blogResponse.setBlogId(blog.getBlogID());
+            blogResponse.setTitle(blog.getTitle());
+            blogResponse.setContent(blog.getContent());
+            blogResponse.setCategory(blog.getCategory());
+            blogResponse.setSlug(blog.getSlug());
+            blogResponse.setStatus(blog.getStatus());
+
+            blogResponsesList.add(blogResponse);
+
+        }
+        return blogResponsesList;
+
+
+
+    }
+
+    //filter by blog status (published or not)
+
+    public List<BlogResponse> getStatusFilteredBlogs( BlogStatus status , String username){
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        //List <BlogPost> blogs;              // = blogPostRepository.findCategoryFilteredBlogs(category);
+
+        List<BlogPost> blogs = blogPostRepository.findStatusFilteredBlogs(
+                user.getId(),
+               status.name()
+        );
+
+        List <BlogResponse> blogResponses = new ArrayList<>();
+
+        for (BlogPost blog : blogs){
+            BlogResponse br = new BlogResponse();
+            br.setBlogId(blog.getBlogID());
+            br.setTitle(blog.getTitle());
+            br.setContent(blog.getContent());
+            br.setCategory(blog.getCategory());
+            br.setSlug(blog.getSlug());
+            br.setStatus(blog.getStatus());
+
+            blogResponses.add(br);
+        }
+
+        return blogResponses;
+    }
+
+    
+
 
 
 
