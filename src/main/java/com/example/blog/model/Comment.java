@@ -1,4 +1,4 @@
-package com.example.blog.model;
+/*package com.example.blog.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,3 +28,4 @@ public class Comment {
 
 
 }
+*/

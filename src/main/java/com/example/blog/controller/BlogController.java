@@ -120,6 +120,19 @@ String username= authentication.getName();
         return ResponseEntity.ok(blogService.getStatusFilteredBlogs(status, username));
     }
 
+    @GetMapping("/search-by-title")
+    public ResponseEntity <List <BlogResponse>> searchBlogsByTitle(@RequestParam String title){
+        return ResponseEntity.ok(blogService.getBlogsByTitle(title));
+    }
+
+    @GetMapping("/search-by-content")
+    public ResponseEntity<List<BlogResponse>> searchBlogsByContent(@RequestParam String content){
+        return ResponseEntity.ok(blogService.getBlogsByContent(content));
+
+    }
+
+
+
 
 
 

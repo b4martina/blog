@@ -159,11 +159,6 @@ return blogPostRepository.save(blogPost);
     }
 
 
-
-
-
-
-
     public BlogPost deleteBlogByID(Long blogID, String username ){
 
         BlogPost blogPost = blogPostRepository.findByBlogID(blogID)
@@ -192,39 +187,6 @@ return blogPostRepository.save(blogPost);
     }
 
 
-    //filtering blogs by category or publication status
-    //category: features: anyone can retrieve this data, no need for authenticcation.
-/*
-    public List<BlogResponse> getStatusFilteredBooks (BlogStatus status){
-        List <BlogPost> blogs;
-
-        if (status== null) {
-            blogs = blogPostRepository.findAll();
-        }else{
-            blogs = blogPostRepository.findFilteredBlogs(status.name());
-        }
-       List<BlogResponse> blogResponse= new ArrayList<>();
-
-        for (BlogPost blog : blogs ){
-            BlogResponse br = new BlogResponse();
-            br.setTitle(blog.getTitle());
-            br.setContent(blog.getContent());
-            br.setCategory(blog.getCategory());
-            br.setStatus(blog.getStatus());
-            br.setSlug(blog.getSlug());
-
-            blogResponse.add(br);
-
-        }
-
-       return blogResponse;
-
-    }
-
-
-
-
-
     //publication status: only an owner can view status : published or draft.
     public List<BlogResponse> getCategoryFilteredBooks (BlogStatus status){
         List <BlogPost> blogs;
@@ -250,7 +212,7 @@ return blogPostRepository.save(blogPost);
 
         return blogResponse;
 
-    }*/
+    }
 
 
     public List<BlogResponse> getCategoryFilteredBooks(String category){
@@ -314,6 +276,49 @@ return blogPostRepository.save(blogPost);
         return blogResponses;
     }
 
+    public List<BlogResponse> getBlogsByTitle(String title){
+        List <BlogPost> blogs;
+        blogs = blogPostRepository.findByTitleContainingIgnoreCase(title);
+        List <BlogResponse> blogResponses = new ArrayList<>();
+
+        for (BlogPost blog : blogs) {
+            BlogResponse br = new BlogResponse();
+            br.setBlogId(blog.getBlogID());
+            br.setTitle(blog.getTitle());
+            br.setContent(blog.getContent());
+            br.setCategory(blog.getCategory());
+            br.setStatus(blog.getStatus());
+            br.setSlug(blog.getSlug());
+
+            blogResponses.add(br);
+        }
+
+
+        return blogResponses;
+    }
+
+
+    public List<BlogResponse> getBlogsByContent(String content){
+       List <BlogPost> blogs;
+        blogs=blogPostRepository.findByContentContainingIgnoreCase(content);
+
+        List <BlogResponse> blogResponses = new ArrayList<>();
+
+        for (BlogPost blog : blogs ){
+
+            BlogResponse br = new BlogResponse();
+            br.setBlogId(blog.getBlogID());
+            br.setTitle(blog.getTitle());
+            br.setContent(blog.getContent());
+            br.setCategory(blog.getCategory());
+            br.setStatus(blog.getStatus());
+            br.setSlug(blog.getSlug());
+            blogResponses.add(br);
+        }
+        return blogResponses;
+
+
+    }
     
 
 

@@ -33,9 +33,8 @@ List<BlogPost> findFilteredBlogs (@Param("status") String status );
     List<BlogPost> findStatusFilteredBlogs (    @Param("userId") Long id,
                                                 @Param("status")String status);
 
-
-
-
+    List <BlogPost> findByTitleContainingIgnoreCase(String title);
+    List <BlogPost> findByContentContainingIgnoreCase(String content);
 
 
 }
