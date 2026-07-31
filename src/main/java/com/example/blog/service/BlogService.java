@@ -57,17 +57,8 @@ blogPost.setCategory(blogRequest.getCategory());
 blogPost.setSlug(slug);
 blogPost.setStatus(blogRequest.getStatus());
 
-
-
-
-
 blogPost.setBlogAuthor(author);
-
-
-      //  String slug = generateSlug(blogRequest.getTitle());
-
-
-        // avoid duplicate slugs
+// avoid duplicate slugs
         if (blogPostRepository.existsBySlug(slug)) {
             slug = slug + "-" + System.currentTimeMillis();
         }

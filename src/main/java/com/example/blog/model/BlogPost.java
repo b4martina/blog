@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import jdk.jfr.Category;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 @Table(name="blogs")
@@ -40,6 +43,11 @@ private String slug;
     @JoinColumn(name= "author_id")
     @JsonIgnore
     private User blogAuthor;
+
+    @OneToMany(mappedBy="blogPost")
+    @JsonIgnore
+    private List<Comment> comment= new ArrayList<>();
+
 
     public BlogPost() {
     }

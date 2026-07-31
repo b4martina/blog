@@ -50,5 +50,9 @@ public class User {
     private List<BlogPost> blogs = new ArrayList<>();
 
 
+    @OneToMany(mappedBy= "commentAuthor")
+    @JsonIgnore
+    private List<Comment> comments= new ArrayList<>();
+
 
 }
