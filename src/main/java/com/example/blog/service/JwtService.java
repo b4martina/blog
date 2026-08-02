@@ -25,10 +25,10 @@ public class JwtService {
         SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
-                .subject(username) // Updated from setSubject()
-                .issuedAt(new Date()) // Updated from setIssuedAt()
+                .subject(username)
+                .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 18000000)) // Updated from setExpiration()
-                .signWith(key, Jwts.SIG.HS256) // Corrected algorithm and key placement
+                .signWith(key, Jwts.SIG.HS256)
                 .compact();
     }
 

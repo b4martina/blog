@@ -13,6 +13,8 @@ public class CommentResponse {
     private User commentAuthor;
     private BlogPost blogPost;
 
+    public CommentResponse() {
+    }
 
     public CommentResponse(Long commentId, String commentBody, LocalDate createdAt, User commentAuthor, BlogPost blogPost) {
         this.commentId = commentId;

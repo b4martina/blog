@@ -2,6 +2,7 @@ package com.example.blog.service;
 
 
 import com.example.blog.dto.CommentRequest;
+import com.example.blog.dto.CommentResponse;
 import com.example.blog.model.BlogPost;
 import com.example.blog.model.Comment;
 import com.example.blog.model.User;
@@ -11,6 +12,8 @@ import com.example.blog.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -40,5 +43,58 @@ public class CommentService {
 
 
     }
+/*public List<Book> getBooksByUser(Long ownerId) {
+        return bookRepository.findByOwnerId(ownerId);
+
+
+    }*/
+   public List<CommentResponse> getAllComments(Long blogId){
+
+       List <Comment> comments = commentRepository.findByBlogPost_BlogID(blogId);
+
+       List <CommentResponse> commentResponses=new ArrayList<>();
+       for (Comment comment: comments){
+          CommentResponse cr =new CommentResponse();
+          cr.setCommentId(comment.getCommentId());
+          cr.setCommentAuthor(comment.getCommentAuthor());
+          cr.setCommentBody(comment.getCommentBody());
+          cr.setCreatedAt(comment.getCreatedAt());
+           cr.setBlogPost(comment.getBlogPost());
+
+           commentResponses.add(cr);
+
+       }
+
+
+return commentResponses;
+
+
+    }
+
+     public Comment deleteByCommentId(Long blogId, Long commentId, String username){
+         User commentAuthor = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found!"));
+         BlogPost blogPost = blogPostRepository.findById(blogId).orElseThrow(() -> new RuntimeException("Blog post not found!"));
+        Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(()->new RuntimeException("Comment not found!"));
+
+         if (!comment.getBlogPost().getBlogID().equals(blogId)) {
+             throw new RuntimeException("Comment does not belong to this blog!");
+         }
+
+         if (!comment.getCommentAuthor().getId().equals(commentAuthor.getId())) {
+             throw new RuntimeException("You can only delete your own comments!");
+         }
+
+
+
+         commentRepository.delete(comment);
+         return comment;
+
+
+     }
+
+
+
+
+
 
 }
