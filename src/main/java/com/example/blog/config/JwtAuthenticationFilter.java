@@ -1,6 +1,5 @@
 package com.example.blog.config;
 
-
 import com.example.blog.service.CustomUserDetailsService;
 import com.example.blog.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -44,29 +43,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = header.substring(7);
-
         String username = jwtService.extractUsername(token);
 
 
         if( username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
             if (jwtService.isTokenValid(token, userDetails.getUsername())){
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken( userDetails, null , userDetails.getAuthorities());
-
                 authenticationToken.setDetails(
                         new WebAuthenticationDetailsSource()
                                 .buildDetails(request));
-
                 SecurityContextHolder.getContext()
                         .setAuthentication(authenticationToken);
-
             }
-
         }
-
         filterChain.doFilter(request, response);
-
-
     }
 }

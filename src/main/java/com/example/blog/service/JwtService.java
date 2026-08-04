@@ -32,27 +32,15 @@ public class JwtService {
                 .compact();
     }
 
-
-
     public String extractUsername(String token){
-        return extractClaims(token).getSubject();
-    }
-
-
+        return extractClaims(token).getSubject();}
     public boolean isTokenValid(String token, String username) {
-
         return username.equals(extractUsername(token))
-                && extractClaims(token).getExpiration().after(new Date());
-    }
-
+                && extractClaims(token).getExpiration().after(new Date());}
     private Claims extractClaims(String token) {
-
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
-                .getPayload();
-    }
-
-
+                .getPayload();}
 }

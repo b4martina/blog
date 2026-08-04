@@ -27,8 +27,6 @@ public  class BlogService {
         this.userRepository=userRepository;
     }
 
-
-
     //slug generation
     private String generateSlug(String title) {
 
@@ -40,29 +38,23 @@ public  class BlogService {
     }
 //create blog
     public BlogPost createBlog (BlogRequest blogRequest, String username){
-   User author = userRepository.findByUsername(username).orElseThrow(() ->new RuntimeException("User not found!"));
+    User author = userRepository.findByUsername(username).orElseThrow(() ->new RuntimeException("User not found!"));
 
+    BlogPost blogPost = new BlogPost();
 
-   BlogPost blogPost = new BlogPost();
+    blogPost.setTitle(blogRequest.getTitle());
+    blogPost.setContent(blogRequest.getContent());
+    blogPost.setCategory(blogRequest.getCategory());
 
-blogPost.setTitle(blogRequest.getTitle());
-blogPost.setContent(blogRequest.getContent());
-blogPost.setCategory(blogRequest.getCategory());
-        String slug = generateSlug(blogRequest.getTitle());
-
-        if (blogPostRepository.existsBySlug(slug)) {
-            slug = slug + "-" + System.currentTimeMillis();
-        }
-
-blogPost.setSlug(slug);
-blogPost.setStatus(blogRequest.getStatus());
-
-blogPost.setBlogAuthor(author);
+    String slug = generateSlug(blogRequest.getTitle());
 // avoid duplicate slugs
-        if (blogPostRepository.existsBySlug(slug)) {
-            slug = slug + "-" + System.currentTimeMillis();
-        }
-return blogPostRepository.save(blogPost);
+    if (blogPostRepository.existsBySlug(slug)) {slug = slug + "-" + System.currentTimeMillis();}
+
+    blogPost.setSlug(slug);
+    blogPost.setStatus(blogRequest.getStatus());
+    blogPost.setBlogAuthor(author);
+
+    return blogPostRepository.save(blogPost);
     }
 
     //get all posts
@@ -73,7 +65,11 @@ return blogPostRepository.save(blogPost);
 
         return blogs.map(blog -> new BlogResponse(
                 blog.getBlogID(),
-        blog.getTitle(), blog.getContent(), blog.getCategory(), blog.getSlug(), blog.getStatus()
+                blog.getTitle(),
+                blog.getContent(),
+                blog.getCategory(),
+                blog.getSlug(),
+                blog.getStatus()
         ));
 
     }
@@ -91,9 +87,7 @@ return blogPostRepository.save(blogPost);
     blogPost.setTitle(blogRequest.getTitle());
         blogPost.setContent(blogRequest.getContent());
         blogPost.setCategory(blogRequest.getCategory());
-
         blogPost.setStatus(blogRequest.getStatus());
-
         String slug = generateSlug(blogRequest.getTitle());
 
         if (!slug.equals(blogPost.getSlug())
@@ -107,6 +101,32 @@ return blogPostRepository.save(blogPost);
 
 
     }
+
+public BlogPost updateBlogBySlug (String slug, BlogRequest blogRequest, String username){
+        BlogPost blogPost= blogPostRepository.findBySlug(slug) .orElseThrow(()-> new RuntimeException("Blog Not Found"));
+        if (!blogPost.getBlogAuthor().getUsername().equals(username)){
+            throw new RuntimeException("cant modify");}
+
+
+        blogPost.setTitle(blogRequest.getTitle());
+        blogPost.setContent(blogRequest.getContent());
+        blogPost.setCategory(blogRequest.getCategory());
+        blogPost.setStatus(blogRequest.getStatus());
+
+    String newSlug = generateSlug(blogRequest.getTitle());
+
+    if (!newSlug.equals(blogPost.getSlug())
+            && blogPostRepository.existsBySlug(newSlug)) {
+        newSlug = newSlug + "-" + System.currentTimeMillis();
+    }
+
+    blogPost.setSlug(newSlug);
+
+        return blogPostRepository.save(blogPost);}
+
+
+
+
 
 
     public BlogResponse getBlogBySlug(String slug){
@@ -179,9 +199,9 @@ return blogPostRepository.save(blogPost);
 
 
     //publication status: only an owner can view status : published or draft.
-    public List<BlogResponse> getCategoryFilteredBooks (BlogStatus status){
+    /*public List<BlogResponse> getCategoryFilteredBooks (BlogStatus status){
         List <BlogPost> blogs;
-
+//probably doesnt work, not sure :\
         if (status== null) {
             blogs = blogPostRepository.findAll();
         }else{
@@ -203,7 +223,7 @@ return blogPostRepository.save(blogPost);
 
         return blogResponse;
 
-    }
+    }*/
 
 
     public List<BlogResponse> getCategoryFilteredBooks(String category){

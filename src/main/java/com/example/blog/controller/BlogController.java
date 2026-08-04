@@ -45,10 +45,7 @@ public class BlogController {
     public ResponseEntity<Page<BlogResponse>> getAllBlogs( @RequestParam (defaultValue = "0") int page,
                                                            @RequestParam (defaultValue = "10") int size){
         Page <BlogResponse> blogs = blogService.getAllBlogsWithPagiationint(page, size);
-        return ResponseEntity.ok(blogs);
-
-            }
-
+        return ResponseEntity.ok(blogs);}
     @PutMapping("/{blogID}")
             public ResponseEntity<BlogResponse> updateBlog(@PathVariable Long blogID, @RequestBody BlogRequest blogRequest, Authentication authentication){
         String username = authentication.getName();
@@ -132,7 +129,24 @@ String username= authentication.getName();
     }
 
 
+    @PutMapping("/edit-by-slug/{slug}")
+    public BlogResponse editBlogsBySlug (@PathVariable String slug, Authentication authentication, @RequestBody BlogRequest blogRequest){
+        String username = authentication.getName();
 
+        BlogPost updatedBlog = blogService.updateBlogBySlug(slug, blogRequest, username);
+
+        BlogResponse br = new BlogResponse();
+        br.setBlogId(updatedBlog.getBlogID());
+        br.setTitle(updatedBlog.getTitle());
+        br.setContent(updatedBlog.getContent());
+        br.setCategory(updatedBlog.getCategory());
+        br.setSlug(updatedBlog.getSlug());
+        br.setStatus(updatedBlog.getStatus());
+
+    return br;
+    //return ResponseEntity.ok(br);
+
+    }
 
 
 
