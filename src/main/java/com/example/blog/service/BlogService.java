@@ -364,6 +364,57 @@ public BlogPost updateBlogBySlug (String slug, BlogRequest blogRequest, String u
         return blogResponse;
     }
 
+    public List <BlogResponse> getFilteredBlogsS(Long userId, String category, String content ){
+        List <BlogPost> blogs;
+
+        if (userId != null && category != null && content != null){
+            blogs = blogPostRepository.findBlogsFilteredTwoS( userId, category, content);
+        } else if (userId  != null && content != null ){
+            blogs = blogPostRepository.findByAuthorIdAndContentContainingIgnoreCase(userId, content);
+        } else if ( content != null && category != null ) {
+            blogs = blogPostRepository.findByCategoryAndContentContainingIgnoreCase(category, content);
+        } else if (userId!= null && category !=null ) {
+            blogs= blogPostRepository.findByBlogAuthorIdAndCategory(userId, category);
+        } else if (userId!= null ){
+            blogs = blogPostRepository.findBlogsByAuthorId(userId);
+        }else if (content != null){
+            blogs = blogPostRepository.findByContentContainingIgnoreCase(content);
+        } else if (category!= null){
+            blogs = blogPostRepository.findCategoryFilteredBlogs(category);
+        } else { blogs = blogPostRepository.findAll();}
+
+
+        // List <BlogPost> blogs;
+        // = blogPostRepository.findBlogsFilteredTwo( userId, category, content);
+
+
+        //takes published blogs only
+
+        List<BlogPost> publishedBlogs = new ArrayList<>();
+        for (BlogPost blog : blogs) {
+            if (blog.getStatus() == BlogStatus.PUBLISHED) {
+                publishedBlogs.add(blog);
+            }
+        }
+        blogs = publishedBlogs;
+
+        List <BlogResponse> blogResponse = new ArrayList<>();
+        for (BlogPost blog : blogs){
+            BlogResponse br = new BlogResponse();
+            br.setBlogId(blog.getBlogID());
+            br.setTitle(blog.getTitle());
+            br.setContent(blog.getContent());
+            br.setCategory(blog.getCategory());
+            br.setStatus(blog.getStatus());
+            br.setSlug(blog.getSlug());
+            blogResponse.add(br);
+        }
+        return blogResponse;
+    }
+
 
 
 }
+
+
+

@@ -167,6 +167,11 @@ return ResponseEntity.ok(blogService.filterStatusBlogs(status, username));
         return ResponseEntity.ok(blogService.getFilteredBlogsTwo(userId, category, content));
     }
 
+    @GetMapping("/test-f")
+    public ResponseEntity<List<BlogResponse>> getFilteredBlogsC (@RequestParam (required = false) Long userId, @RequestParam (required = false) String category, @RequestParam (required = false) String content){
+        return ResponseEntity.ok(blogService.getFilteredBlogsS(userId, category,content));
+    }
+
 
 
 }

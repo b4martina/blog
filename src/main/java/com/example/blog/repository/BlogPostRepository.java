@@ -50,17 +50,48 @@ List<BlogPost> findFilteredBlogs (@Param("status") String status );
     //ordered by id
     @Query (nativeQuery = true, value = "SELECT * FROM blogs ORDER BY  blogid")
     List <BlogPost> findBlogsIdOrdered();
-    //get multiple filters
+    //get multiple filters filter 2
     @Query (nativeQuery = true, value= "select * from blogs WHERE status = 'PUBLISHED' and (:userId IS NULL OR author_id = :userId) AND (:category IS NULL OR category = :category) AND (:content IS NULL OR LOWER(content) LIKE LOWER(CONCAT('%', :content, '%')))")
     List <BlogPost> findBlogsFilteredTwo(@Param ("userId") Long userId,
                                          @Param("category") String category,
                                          @Param ("content" ) String content);
 
+    // test f
+    @Query (nativeQuery = true, value= "select * from blogs WHERE status = 'PUBLISHED' and  author_id = :userId AND category = :category AND LOWER(content) LIKE LOWER(CONCAT('%', :content, '%'))")
+    List <BlogPost> findBlogsFilteredTwoS(@Param ("userId") Long userId,
+                                         @Param("category") String category,
+                                         @Param ("content" ) String content);
+
+
 
     List <BlogPost> findByTitleContainingIgnoreCase(String title);
 
+    //made with the purpose of finding by author id and content only
+    //List <BlogPost> findByAuthorIdAndContentContainingIgnoreCase(Long userId, String content );
+    @Query(value = "SELECT * FROM blogs WHERE author_id = :userId and LOWER(content) LIKE LOWER(CONCAT('%', :content, '%'))", nativeQuery = true)
+    List<BlogPost> findByAuthorIdAndContentContainingIgnoreCase(@Param("userId") Long userId,
+                                                                 @Param("content") String content);
+
+
+
+  /*  @Query(value = "SELECT * FROM blogs WHERE author_id = :userId", nativeQuery = true)
+    List<BlogPost> findBlogsByAuthorId(@Param("userId") Long userId);*/
+
+
+
+    //made with the purpose of finding by category id and content only
+    List <BlogPost> findByCategoryAndContentContainingIgnoreCase(String category, String content);
+   // made with the purpose of finding by author id and category only
+    List <BlogPost> findByBlogAuthorIdAndCategory(Long userId, String category);
+
+
 
     List <BlogPost> findByContentContainingIgnoreCase(String content);
+
+
+
+
+
 
 
 }
