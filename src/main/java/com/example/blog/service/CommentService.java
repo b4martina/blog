@@ -47,11 +47,7 @@ public class CommentService {
 
 
     }
-/*public List<Book> getBooksByUser(Long ownerId) {
-        return bookRepository.findByOwnerId(ownerId);
 
-
-    }*/
    public List<CommentResponse> getAllComments(Long blogId){
 
        List <Comment> comments = commentRepository.findByBlogPost_BlogID(blogId);
@@ -63,7 +59,7 @@ public class CommentService {
           cr.setCommentAuthor(comment.getCommentAuthor());
           cr.setCommentBody(comment.getCommentBody());
           cr.setCreatedAt(comment.getCreatedAt());
-           cr.setBlogPost(comment.getBlogPost());
+          cr.setBlogPost(comment.getBlogPost());
 
            commentResponses.add(cr);
 
@@ -87,17 +83,17 @@ return commentResponses;
          return comment;
      }
 
-public Comment deleteByPostSlug(String slug, Long commentId, String username){
+    public Comment deleteByPostSlug(String slug, Long commentId, String username){
        User commentAuthor = userRepository.findByUsername(username) .orElseThrow(()-> new RuntimeException("user nor found!"));
        BlogPost blogPost= blogPostRepository.findBySlug(slug).orElseThrow(()-> new RuntimeException("Blog not found :/"));
-   Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(()-> new RuntimeException("comment does not exist"));
+       Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(()-> new RuntimeException("comment does not exist"));
    if (!comment.getBlogPost().getSlug().equals(slug)){
        throw new RuntimeException("Comment does not belong to this blog!");}
     if (!comment.getCommentAuthor().getId().equals(commentAuthor.getId())){
         throw new RuntimeException("You can only delete your own comments!");}
-commentRepository.delete(comment);
+    commentRepository.delete(comment);
 
-return comment;
+    return comment;
    }
 
 

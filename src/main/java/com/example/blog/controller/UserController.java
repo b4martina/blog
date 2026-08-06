@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @PostMapping ("/log-in")
-public ResponseEntity<?> login (@RequestBody LogInRequest logInRequest){
+    public ResponseEntity<?> login (@RequestBody LogInRequest logInRequest){
         try {
             UserResponse userResponse;
             userResponse=userService.login(logInRequest);

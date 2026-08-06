@@ -33,7 +33,33 @@ List<BlogPost> findFilteredBlogs (@Param("status") String status );
     List<BlogPost> findStatusFilteredBlogs (    @Param("userId") Long id,
                                                 @Param("status")String status);
 
+    //find blogs of username
+    //@Query (nativeQuery = true, value= "SELECT * from blogs where ")
+
+    @Query(value = "SELECT * FROM blogs WHERE author_id = :userId and status = :status", nativeQuery = true)
+    List<BlogPost> findStatusBlogsByAuthorId(@Param("userId") Long userId,
+                                             @Param("status") String status);
+
+    //author id
+    @Query (nativeQuery = true, value = "SELECT * from blogs where author_id= :userId  ")
+    List <BlogPost> findBlogsByUserID (@Param ("userId") Long userId);
+
+
+    @Query(value = "SELECT * FROM blogs WHERE author_id = :userId", nativeQuery = true)
+    List<BlogPost> findBlogsByAuthorId(@Param("userId") Long userId);
+    //ordered by id
+    @Query (nativeQuery = true, value = "SELECT * FROM blogs ORDER BY  blogid")
+    List <BlogPost> findBlogsIdOrdered();
+    //get multiple filters
+    @Query (nativeQuery = true, value= "select * from blogs WHERE status = 'PUBLISHED' and (:userId IS NULL OR author_id = :userId) AND (:category IS NULL OR category = :category) AND (:content IS NULL OR LOWER(content) LIKE LOWER(CONCAT('%', :content, '%')))")
+    List <BlogPost> findBlogsFilteredTwo(@Param ("userId") Long userId,
+                                         @Param("category") String category,
+                                         @Param ("content" ) String content);
+
+
     List <BlogPost> findByTitleContainingIgnoreCase(String title);
+
+
     List <BlogPost> findByContentContainingIgnoreCase(String content);
 
 

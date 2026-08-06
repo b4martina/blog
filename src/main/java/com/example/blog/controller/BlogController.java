@@ -148,6 +148,25 @@ String username= authentication.getName();
 
     }
 
+    @GetMapping("/get-by-status")
+    public ResponseEntity<List<BlogResponse>> getBlogsByStatusAuthor (@RequestParam(required = false) BlogStatus status, Authentication authentication){
+       String username= authentication.getName();
+
+return ResponseEntity.ok(blogService.filterStatusBlogs(status, username));
+    }
+
+    //getIdOrderedBLogs
+    @GetMapping ("/get-ordered")
+    public ResponseEntity <List<BlogResponse>> getIdOrderedBlogs(){
+        return ResponseEntity.ok(blogService.getIdOrderedBlogs());
+    }
+
+
+    @GetMapping("/filter-2")
+    public ResponseEntity <List<BlogResponse>> getFilteredBlogsTwo(@RequestParam (required = false) Long userId, @RequestParam (required = false) String category, @RequestParam (required = false) String content){
+        return ResponseEntity.ok(blogService.getFilteredBlogsTwo(userId, category, content));
+    }
+
 
 
 }

@@ -57,9 +57,9 @@ public class CommentController {
     @DeleteMapping("/by-slug/{slug}/{commentId}")
     public Comment deleteComment(@PathVariable String slug,
                                 @PathVariable Long commentId, Authentication authentication){
+        //String username = authentication.getName();
+
         return commentService.deleteByPostSlug(slug, commentId, authentication.getName());
     }
-
-
 
 }

@@ -127,8 +127,6 @@ public BlogPost updateBlogBySlug (String slug, BlogRequest blogRequest, String u
 
 
 
-
-
     public BlogResponse getBlogBySlug(String slug){
 
         BlogPost blogPost= blogPostRepository.findBySlug(slug).orElseThrow(() ->new RuntimeException("THe blog you searched for does not exist!"));
@@ -198,34 +196,6 @@ public BlogPost updateBlogBySlug (String slug, BlogRequest blogRequest, String u
     }
 
 
-    //publication status: only an owner can view status : published or draft.
-    /*public List<BlogResponse> getCategoryFilteredBooks (BlogStatus status){
-        List <BlogPost> blogs;
-//probably doesnt work, not sure :\
-        if (status== null) {
-            blogs = blogPostRepository.findAll();
-        }else{
-            blogs = blogPostRepository.findFilteredBlogs(status.name());
-        }
-        List<BlogResponse> blogResponse= new ArrayList<>();
-
-        for (BlogPost blog : blogs ){
-            BlogResponse br = new BlogResponse();
-            br.setTitle(blog.getTitle());
-            br.setContent(blog.getContent());
-            br.setCategory(blog.getCategory());
-            br.setStatus(blog.getStatus());
-            br.setSlug(blog.getSlug());
-
-            blogResponse.add(br);
-
-        }
-
-        return blogResponse;
-
-    }*/
-
-
     public List<BlogResponse> getCategoryFilteredBooks(String category){
         List <BlogPost> blogs;              // = blogPostRepository.findCategoryFilteredBlogs(category);
 
@@ -251,7 +221,6 @@ public BlogPost updateBlogBySlug (String slug, BlogRequest blogRequest, String u
 
         }
         return blogResponsesList;
-
 
 
     }
@@ -283,7 +252,6 @@ public BlogPost updateBlogBySlug (String slug, BlogRequest blogRequest, String u
 
             blogResponses.add(br);
         }
-
         return blogResponses;
     }
 
@@ -324,6 +292,7 @@ public BlogPost updateBlogBySlug (String slug, BlogRequest blogRequest, String u
             br.setCategory(blog.getCategory());
             br.setStatus(blog.getStatus());
             br.setSlug(blog.getSlug());
+
             blogResponses.add(br);
         }
         return blogResponses;
@@ -331,7 +300,69 @@ public BlogPost updateBlogBySlug (String slug, BlogRequest blogRequest, String u
 
     }
     
+//filtering all draft and published blogs of one user
+    public List<BlogResponse> filterStatusBlogs(BlogStatus status, String username ) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("usre not found"));
 
+        List<BlogPost> blogs;
+
+        if (status == null) {
+            blogs= blogPostRepository.findBlogsByAuthorId(user.getId());
+        } else {
+          blogs=  blogPostRepository.findStatusBlogsByAuthorId(user.getId(), status.name());
+        }
+
+        List <BlogResponse> blogResponses = new ArrayList<>();
+        for (BlogPost blog : blogs){
+            BlogResponse br= new BlogResponse();
+            br.setBlogId(blog.getBlogID());
+            br.setTitle(blog.getTitle());
+            br.setContent(blog.getContent());
+            br.setCategory(blog.getCategory());
+            br.setStatus(blog.getStatus());
+            br.setSlug(blog.getSlug());
+            blogResponses.add(br);
+        }
+
+    return  blogResponses;
+    }
+
+
+    public List<BlogResponse> getIdOrderedBlogs(){
+        List <BlogPost> blogs = blogPostRepository.findBlogsIdOrdered();
+
+        List <BlogResponse> blogResponse = new ArrayList<>();
+        for (BlogPost blog : blogs){
+            BlogResponse br = new BlogResponse();
+            br.setBlogId(blog.getBlogID());
+            br.setTitle(blog.getTitle());
+            br.setContent(blog.getContent());
+            br.setCategory(blog.getCategory());
+            br.setStatus(blog.getStatus());
+            br.setSlug(blog.getSlug());
+
+            blogResponse.add(br);        }
+
+        return blogResponse;
+    }
+
+
+    public List <BlogResponse> getFilteredBlogsTwo(Long userId, String category, String content ){
+    List <BlogPost> blogs = blogPostRepository.findBlogsFilteredTwo( userId, category, content);
+
+        List <BlogResponse> blogResponse = new ArrayList<>();
+        for (BlogPost blog : blogs){
+            BlogResponse br = new BlogResponse();
+            br.setBlogId(blog.getBlogID());
+            br.setTitle(blog.getTitle());
+            br.setContent(blog.getContent());
+            br.setCategory(blog.getCategory());
+            br.setStatus(blog.getStatus());
+            br.setSlug(blog.getSlug());
+            blogResponse.add(br);
+        }
+        return blogResponse;
+    }
 
 
 

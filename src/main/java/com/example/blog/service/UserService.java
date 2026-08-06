@@ -53,18 +53,18 @@ public class UserService {
             throw new IllegalArgumentException("Username already exists.");
         }
 
-      User user = new User();
+        User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setUsername(registerRequest.getUsername());
         user.setName(registerRequest.getName());
 
 
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+
         userRepository.save(user);
 
 
         String token = jwtService.generateToken(user.getUsername());
-
         return new JWTResponse(token);
 
 
